@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { ChevronDown, LogOut, User, Settings } from 'lucide-react'
 import logo from '../logo.svg'
-import UserProfile from './UserProfile'
 
 const mockData = [
   {
@@ -53,14 +52,17 @@ const AdminDashboard = () => {
     setSelectedUser(null)
   }
 
-  const AdminMenu = () => (
-    <div className="relative">
-      <button
-        onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
-        className="bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-      >
-        Admin <ChevronDown size={16} />
-      </button>
+  const AdminMenu = () => {
+    const navigate = useNavigate();
+
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
+          className="bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+        >
+          Admin <ChevronDown size={16} />
+        </button>
 
       {isAdminMenuOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
@@ -71,6 +73,7 @@ const AdminDashboard = () => {
             >
               <User size={16} className="mr-2" /> Switch to User
             </a>
+           
           </div>
         </div>
       )}

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Edit, Download, Target, Minus, Bell, User, ChevronDown, MessageSquare, Heart, RefreshCw, Sun, HelpCircle, Settings, Maximize } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
 const TradingInterface = () => {
+    const navigate = useNavigate();
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     const [showBalancePopup, setShowBalancePopup] = useState(false);
     const [stake, setStake] = useState(10);
@@ -67,6 +69,12 @@ const TradingInterface = () => {
                     </div>
                     <button className="bg-red-500 text-white px-4 py-1 rounded">Deposit</button>
                 </div>
+                <button 
+                    onClick={() => navigate('/admin')}
+                    className="bg-red-500 text-white px-4 py-1 rounded ml-2"
+                >
+                    Admin
+                </button>
             </div>
 
             <div className="flex flex-1">
