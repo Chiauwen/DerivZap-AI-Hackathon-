@@ -96,6 +96,7 @@ const TradingInterface = () => {
                 <div className="flex items-center space-x-6">
                     <span className="text-red-500 text-2xl font-bold">d</span>
                     <span>Trader's Hub</span>
+                    {/* DerivTrader BUTTON */}
                     <div className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded">
                         <img src={logo} alt="Logo" className="h-8 w-8" />
                         <span>derivTrader</span>
@@ -108,6 +109,7 @@ const TradingInterface = () => {
                 <div className="flex items-center space-x-4">
                     <Bell size={20} />
                     <User size={20} />
+                    {/* PORTFOLIO BUTTON */}
                     <div className="relative">
                         <button
                             className="flex items-center space-x-2"
@@ -144,6 +146,7 @@ const TradingInterface = () => {
                         <button className="p-2 hover:bg-gray-100 rounded"><Download size={20} /></button>
 
                         {/* Dropdown for Chart Types */}
+                        {/* CHART BUTTON */}
                         <div
                             className="relative"
                             onMouseEnter={() => setShowDropdown(true)}
