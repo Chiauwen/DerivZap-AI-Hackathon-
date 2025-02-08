@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@deriv-com/ui": "^1.37.1",
     "cra-template": "1.2.0",
     "lucide-react": "^0.475.0",
     "postcss-cli": "^11.0.0",
