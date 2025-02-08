@@ -2,43 +2,102 @@ import React, { useState, useEffect } from 'react';
 import { Edit, Download, Target, Minus, Bell, User, ChevronDown, MessageSquare, Heart, RefreshCw, Sun, HelpCircle, Settings, Maximize } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { useNavigate } from 'react-router-dom';
+import logo from '../logo.svg';
+
+const app_id = 68351; // Replace with your app_id
+const socketUrl = `wss://ws.derivws.com/websockets/v3?app_id=${app_id}`;
 
 const TradingInterface = () => {
     const navigate = useNavigate();
     const [isDarkTheme, setIsDarkTheme] = useState(false);
+    const [chartData, setChartData] = useState([]);
     const [showBalancePopup, setShowBalancePopup] = useState(false);
     const [stake, setStake] = useState(10);
     const [takeProfit, setTakeProfit] = useState(false);
     const [takeProfitAmount, setTakeProfitAmount] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false); // To control dropdown visibility
+    const [selectedChartType, setSelectedChartType] = useState('Area'); // Selected chart type
+    const [selectedTimeInterval, setSelectedTimeInterval] = useState('1 minute'); // Selected time interval
 
-    // Sample chart data
-    const chartData = [
-        { time: "09:06:45", value: 936.2 },
-        { time: "09:06:50", value: 936.8 },
-        { time: "09:06:55", value: 936.6 },
-        { time: "09:07:00", value: 936.3 },
-        { time: "09:07:05", value: 937.0 },
-        { time: "09:07:10", value: 936.5 },
-        { time: "09:07:15", value: 936.4 }
-    ];
+    // Sample chart data structure
+    const chartTypes = ['Area', 'Candle', 'Hollow', 'OHLC'];
+    const timeIntervals = {
+        Area: ['1 tick', '1 minute', '2 minutes', '3 minutes', '5 minutes', '10 minutes', '15 minutes', '30 minutes', '1 hour', '2 hours', '4 hours', '8 hours', '1 day'],
+        Candle: ['1 minute', '2 minutes', '3 minutes', '5 minutes', '10 minutes', '15 minutes', '30 minutes', '1 hour', '2 hours', '4 hours', '8 hours', '1 day'],
+        Hollow: ['1 minute', '2 minutes', '3 minutes', '5 minutes', '10 minutes', '15 minutes', '30 minutes', '1 hour', '2 hours', '4 hours', '8 hours', '1 day'],
+        OHLC: ['1 minute', '2 minutes', '3 minutes', '5 minutes', '10 minutes', '15 minutes', '30 minutes', '1 hour', '2 hours', '4 hours', '8 hours', '1 day'],
+    };
 
+    // WebSocket connection setup
+    useEffect(() => {
+        const socket = new WebSocket(socketUrl);
+
+        socket.onopen = () => {
+            console.log('[open] Connection established');
+            socket.send(JSON.stringify({ ping: 1 })); // Send initial ping
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+
+                // Assuming 'price' is part of the response and updating chart data
+                if (data?.price) {
+                    const newData = { time: new Date().toLocaleTimeString(), value: data.price };
+
+                    setChartData((prevData) => {
+                        const updatedData = [...prevData, newData];
+                        if (updatedData.length > 100) updatedData.shift(); // Keep only the last 100 points
+                        return updatedData;
+                    });
+                }
+            } catch (error) {
+                console.error('Error parsing WebSocket message:', error);
+            }
+        };
+
+        socket.onerror = (error) => {
+            console.log(`[error] ${error.message}`);
+        };
+
+        socket.onclose = (event) => {
+            if (event.wasClean) {
+                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.log('[close] Connection died');
+            }
+        };
+
+        // Cleanup the WebSocket connection when the component unmounts
+        return () => {
+            socket.close();
+        };
+    }, [chartData]);
+
+    // Function to handle stake changes
     const handleStakeChange = (amount) => {
         const newStake = Math.max(0, stake + amount);
         setStake(newStake);
     };
 
+    // Function to handle chart type changes
+    const handleChartTypeChange = (chartType) => {
+        setSelectedChartType(chartType);
+        setSelectedTimeInterval(timeIntervals[chartType][0]); // Reset time interval to the first available option for the selected chart type
+    };
+
+    // Dynamic class for theme switching
     const containerClasses = `min-h-screen ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`;
     const cardClasses = `${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`;
 
     return (
         <div className={containerClasses}>
-            {/* Top Navigation */}
             <div className={`flex items-center justify-between p-4 ${cardClasses} border-b`}>
                 <div className="flex items-center space-x-6">
                     <span className="text-red-500 text-2xl font-bold">d</span>
                     <span>Trader's Hub</span>
                     <div className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded">
-                        <span>DT</span>
+                        <img src={logo} alt="Logo" className="h-8 w-8" />
                         <span>derivTrader</span>
                         <ChevronDown size={16} />
                     </div>
@@ -83,7 +142,52 @@ const TradingInterface = () => {
                     <div className="flex flex-col space-y-4 p-2">
                         <button className="p-2 hover:bg-gray-100 rounded"><Edit size={20} /></button>
                         <button className="p-2 hover:bg-gray-100 rounded"><Download size={20} /></button>
-                        <button className="p-2 hover:bg-gray-100 rounded"><Target size={20} /></button>
+
+                        {/* Dropdown for Chart Types */}
+                        <div
+                            className="relative"
+                            onMouseEnter={() => setShowDropdown(true)}
+                            onMouseLeave={() => setShowDropdown(false)}
+                        >
+                            <button className="p-2 hover:bg-gray-100 rounded"><Target size={20} /></button>
+
+                            {showDropdown && (
+                                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border">
+                                    <div className="space-y-4">
+                                        <div>
+                                            <span className="font-semibold">Chart Types</span>
+                                            <div className="space-y-2">
+                                                {chartTypes.map((type) => (
+                                                    <button
+                                                        key={type}
+                                                        onClick={() => handleChartTypeChange(type)}
+                                                        className={`w-full text-left p-2 hover:bg-gray-100 rounded ${type === selectedChartType ? 'bg-gray-200' : ''}`}
+                                                    >
+                                                        {type}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <span className="font-semibold">Time Interval</span>
+                                            <div className="space-y-2">
+                                                {timeIntervals[selectedChartType].map((interval) => (
+                                                    <button
+                                                        key={interval}
+                                                        onClick={() => setSelectedTimeInterval(interval)}
+                                                        className={`w-full text-left p-2 hover:bg-gray-100 rounded ${interval === selectedTimeInterval ? 'bg-gray-200' : ''}`}
+                                                    >
+                                                        {interval}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         <button className="p-2 hover:bg-gray-100 rounded"><Minus size={20} /></button>
                     </div>
                 </div>
