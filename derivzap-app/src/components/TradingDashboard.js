@@ -68,6 +68,8 @@ const TradingInterface = () => {
                     <div className={`flex items-center justify-between p-4 ${cardClasses} border-b`}>
                         <div className="flex items-center space-x-6">
                             <img src={logo} alt="Logo" className="h-8 w-8" />
+
+                    {/* TRADER HUB */}
                             <button className="flex items-center space-x-2 hover:bg-gray-100 px-3 transition-colors py-1 rounded"
                                 onClick={() => {
                                     Swal.fire({
@@ -81,6 +83,8 @@ const TradingInterface = () => {
                                 <House size={16} />
                                 <span>Trader's Hub</span>
                             </button>
+
+                    {/* REPORTS */}
                             <button className="flex items-center space-x-2 hover:bg-gray-100 px-3 transition-colors py-1 rounded"
                                 onClick={() => {
                                     Swal.fire({
@@ -97,6 +101,7 @@ const TradingInterface = () => {
                         </div>
 
                         <div className="flex items-center space-x-4">
+                    {/* NOTIFICATIONS   */}
                             <button className="flex items-center space-x-2 hover:bg-gray-100 p-2 transition-colors rounded-full"
                                 onClick={() => {
                                     Swal.fire({
@@ -115,6 +120,7 @@ const TradingInterface = () => {
                                     onClick={() => setShowUserDropdown(!showUserDropdown)}
                                 >
                                     <User size={20} />
+                    {/* PORTFOLIO BUTTON */}
                                 </button>
 
                                 {showUserDropdown && (
@@ -173,6 +179,7 @@ const TradingInterface = () => {
 
                                 {showBalancePopup && (
                                     <div className={`absolute right-0 mt-2 w-64 ${cardClasses} shadow-lg rounded-lg p-4`}>
+                                {/* DEPOSIT */}
                                         <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
                                             onClick={() => {
                                                 Swal.fire({
@@ -184,6 +191,7 @@ const TradingInterface = () => {
                                             }}>
                                             Deposit
                                         </button>
+                                {/* WITHDRAWAL */}
                                         <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
                                             onClick={() => {
                                                 Swal.fire({
@@ -194,6 +202,7 @@ const TradingInterface = () => {
                                                 });
                                             }}>Withdrawal
                                         </button>
+                                {/* TRANSFER */}
                                         <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors">Transfer</button>
                                     </div>
                                 )}
@@ -203,6 +212,7 @@ const TradingInterface = () => {
 
                     <div className="bg-white border-b px-4 py-2 flex items-center space-x-6">
                         <div className="relative">
+                    {/* CHARTS */}
                             <button className="flex items-center space-x-5 p-2 hover:bg-gray-100 transition-colors rounded"
                                 onClick={() => setShowDropdown((prev) => !prev)}>
                                 <img src={charts} alt="ChartsIcon" className="h-4 w-4" />
@@ -245,6 +255,7 @@ const TradingInterface = () => {
                                 </div>
                             )}
                         </div>
+                    {/* INDICATORS */}
                         <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
                             onClick={() => {
                                 Swal.fire({
@@ -259,6 +270,7 @@ const TradingInterface = () => {
                             <span>Indicators</span>
                             <ChevronDown className="h-4 w-4" />
                         </button>
+                {/* TEMPLATES */}
                         <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
                             onClick={() => {
                                 Swal.fire({
@@ -273,6 +285,7 @@ const TradingInterface = () => {
                             <span>Templates</span>
                             <ChevronDown className="h-4 w-4" />
                         </button>
+                {/* TOOLS */}
                         <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
                             onClick={() => {
                                 Swal.fire({
@@ -287,6 +300,7 @@ const TradingInterface = () => {
                             <span>Drawing Tools</span>
                             <ChevronDown className="h-4 w-4" />
                         </button>
+                {/* DOWNLOAD */}
                         <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
                             onClick={() => {
                                 Swal.fire({
@@ -375,9 +389,11 @@ const TradingInterface = () => {
                                 </div>
 
                                 <div className="flex space-x-2">
+                            {/* UP BUTTON */}
                                     <button className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">
                                         Up
                                     </button>
+                            {/* DOWN BUTTON */}
                                     <button className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600">
                                         Down
                                     </button>
