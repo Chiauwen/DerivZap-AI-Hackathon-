@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Clock, User, FileText, Shield, Calendar, Ban, X } from 'lucide-react';
 import { Dialog, DialogContent } from '@radix-ui/react-dialog';
-import profilephoto from './roger.png';
+import profilephoto from '../assets/roger.png';
 
 const UserProfile = () => {
   const [showPhotoModal, setShowPhotoModal] = useState(false);

@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { ChevronDown, LogOut, User, Settings } from 'lucide-react'
-import logo from '../logo.svg'
+import React, { useState } from 'react';
+import { ChevronDown, LogOut, User, Settings } from 'lucide-react';
+import logo from '../logo.svg';
+import UserProfile from '../components/UserProfile';
+import { useNavigate } from 'react-router-dom';
 
 const mockData = [
   {
@@ -33,24 +35,22 @@ const mockData = [
     behavior: 'Deposit and withdrawal bank not same',
     action: 'Investigate',
   },
-]
-
-
+];
 
 const AdminDashboard = () => {
-  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false)
-  const [actionMenuOpen, setActionMenuOpen] = useState(null)
-  const [selectedUser, setSelectedUser] = useState(null)
+  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
+  const [actionMenuOpen, setActionMenuOpen] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const handleUserClick = (userId) => {
-    const user = mockData.find(user => user.id === userId)
-    setSelectedUser(user)
-  }
+    const user = mockData.find(user => user.id === userId);
+    setSelectedUser(user);
+  };
 
   // Return to dashboard view
   const handleBack = () => {
-    setSelectedUser(null)
-  }
+    setSelectedUser(null);
+  };
 
   const AdminMenu = () => {
     const navigate = useNavigate();
@@ -64,21 +64,21 @@ const AdminDashboard = () => {
           Admin <ChevronDown size={16} />
         </button>
 
-      {isAdminMenuOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
-          <div className="py-1">
-            <a
-              href="/profile"
-              className="flex items-center px-4 py-2 hover:bg-gray-100"
-            >
-              <User size={16} className="mr-2" /> Switch to User
-            </a>
-           
+        {isAdminMenuOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+            <div className="py-1">
+              <a
+                href="/trading"
+                className="flex items-center px-4 py-2 hover:bg-gray-100"
+              >
+                <User size={16} className="mr-2" /> Switch to User
+              </a>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  )
+        )}
+      </div>
+    );
+  };
 
   const ActionMenu = ({ rowId }) => (
     <div className="relative">
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
         </div>
       )}
     </div>
-  )
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -179,7 +179,7 @@ const AdminDashboard = () => {
         )}
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default AdminDashboard
+export default AdminDashboard;
