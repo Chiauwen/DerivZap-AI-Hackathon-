@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Clock, User, FileText, Shield, Calendar, Ban, X } from 'lucide-react';
+import { AlertTriangle, Clock, User, FileText, Shield, Calendar, Ban, X, ChevronDown } from 'lucide-react';
 import { Dialog, DialogContent } from '@radix-ui/react-dialog';
 import profilephoto from '../assets/roger.png';
 
 const UserProfile = () => {
-  const [showPhotoModal, setShowPhotoModal] = useState(false);
+    const [showPhotoModal, setShowPhotoModal] = useState(false);
+    const [actionMenuOpen, setActionMenuOpen] = useState(null);
 
   // Mock user data
   const userData = {
@@ -19,6 +20,53 @@ const UserProfile = () => {
     registrationDate: '2023-01-15',
     status: 'Under Investigation'
   };
+
+  const handleAction = (incidentId, action) => {
+    alert(`${action} for incident ${incidentId}`);
+    setActionMenuOpen(null);
+  };
+
+  const ActionMenu = ({ incidentId }) => (
+    <div className="relative">
+      <button
+        onClick={() => setActionMenuOpen(actionMenuOpen === incidentId ? null : incidentId)}
+        className="px-3 py-1 bg-gray-100 rounded-md flex items-center gap-2 text-sm hover:bg-gray-200"
+      >
+        Take Action <ChevronDown size={14} />
+      </button>
+      
+      {actionMenuOpen === incidentId && (
+        <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+          <div className="py-1">
+            <button 
+              onClick={() => handleAction(incidentId, 'Block Account')} 
+              className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+            >
+              Block Account
+            </button>
+            <button 
+              onClick={() => handleAction(incidentId, 'Request Documentation')} 
+              className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+            >
+              Request Documentation
+            </button>
+            <button 
+              onClick={() => handleAction(incidentId, 'Issue Warning')} 
+              className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+            >
+              Issue Warning
+            </button>
+            <button 
+              onClick={() => handleAction(incidentId, 'Mark as Resolved')} 
+              className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+            >
+              Mark as Resolved
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   const PhotoModal = () => (
     <Dialog open={showPhotoModal} onOpenChange={setShowPhotoModal}>
@@ -149,24 +197,27 @@ const UserProfile = () => {
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-red-600 font-medium">{incident.severity}</span>
-                  <span className="text-gray-500">|</span>
-                  <span className="flex items-center gap-1">
-                    <Calendar size={14} />
-                    {incident.date}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock size={14} />
-                    {incident.time}
-                  </span>
-                </div>
-                <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">
-                  {incident.status}
-                </span>
-              </div>
-              <p className="font-medium">{incident.activity}</p>
-              <p className="text-gray-600 mt-1">{incident.details}</p>
-            </div>
-          ))}
+                           <span className="text-gray-500">|</span>
+                           <span className="flex items-center gap-1">
+                             <Calendar size={14} />
+                             {incident.date}
+                           </span>
+                           <span className="flex items-center gap-1">
+                             <Clock size={14} />
+                             {incident.time}
+                           </span>
+                         </div>
+                         <div className="flex items-center gap-2">
+                           <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">
+                             {incident.status}
+                           </span>
+                           <ActionMenu incidentId={incident.id} />
+                         </div>
+                       </div>
+                       <p className="font-medium">{incident.activity}</p>
+                       <p className="text-gray-600 mt-1">{incident.details}</p>
+                     </div>
+                   ))}
         </div>
       </div>
 

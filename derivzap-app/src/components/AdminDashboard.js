@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, LogOut, User, Settings } from 'lucide-react';
 import logo from '../logo.svg';
 import UserProfile from '../components/UserProfile';
+import UserProfile2 from '../components/UserProfile2';
 import { useNavigate } from 'react-router-dom';
 
 const mockData = [
@@ -14,7 +15,7 @@ const mockData = [
   {
     id: 'DEF5678',
     warning: 'Caution',
-    behavior: 'Unusual trading pattern',
+    behavior: 'Unusual account activity',
     action: 'Monitor',
   },
   {
@@ -44,10 +45,9 @@ const AdminDashboard = () => {
 
   const handleUserClick = (userId) => {
     const user = mockData.find(user => user.id === userId);
-    setSelectedUser(user);
+    setSelectedUser({ ...user, profileType: userId === 'ABC1234' ? 'profile1' : userId === 'DEF5678' ? 'profile2' : 'profile1' });
   };
 
-  // Return to dashboard view
   const handleBack = () => {
     setSelectedUser(null);
   };
@@ -122,7 +122,11 @@ const AdminDashboard = () => {
       </header>
       <main className="max-w-7xl mx-auto px-4 py-8">
         {selectedUser ? (
-          <UserProfile user={selectedUser} onBack={handleBack} />
+          selectedUser.profileType === 'profile2' ? (
+            <UserProfile2 user={selectedUser} onBack={handleBack} />
+          ) : (
+            <UserProfile user={selectedUser} onBack={handleBack} />
+          )
         ) : (
           <>
             <h1 className="text-3xl font-bold mb-8">Customer Unusual Activity</h1>
