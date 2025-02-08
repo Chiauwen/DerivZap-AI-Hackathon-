@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ChevronDown, LogOut, User, Settings } from 'lucide-react'
 import logo from '../logo.svg'
+import { useNavigate } from 'react-router-dom';
 
 const mockData = [
   {
@@ -43,30 +44,33 @@ const AdminDashboard = () => {
     window.location.href = `/user/${userId}`
   }
 
-  const AdminMenu = () => (
-    <div className="relative">
-      <button
-        onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
-        className="bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-      >
-        Admin <ChevronDown size={16} />
-      </button>
+  const AdminMenu = () => {
+    const navigate = useNavigate();
 
-      {isAdminMenuOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
-          <div className="py-1">
-            <a
-              href="/profile"
-              className="flex items-center px-4 py-2 hover:bg-gray-100"
-            >
-              <User size={16} className="mr-2" /> Switch to User
-            </a>
-           
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setIsAdminMenuOpen(!isAdminMenuOpen)}
+          className="bg-red-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+        >
+          Admin <ChevronDown size={16} />
+        </button>
+
+        {isAdminMenuOpen && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+            <div className="py-1">
+              <button
+                onClick={() => navigate('/trading')}
+                className="flex items-center px-4 py-2 hover:bg-gray-100 w-full text-left"
+              > 
+                <User size={16} className="mr-2" /> Switch to User
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  )
+        )}
+      </div>
+    );
+  };
 
   const ActionMenu = ({ rowId }) => (
     <div className="relative">
