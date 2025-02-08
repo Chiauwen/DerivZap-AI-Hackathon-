@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Edit, Download, Target, Minus, Bell, User, ChevronDown, MessageSquare, Heart, RefreshCw, Sun, HelpCircle, Settings, Maximize } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { House, BookMarked, Download, ChartLine,  Bell, User, ChevronDown, MessageSquare, Heart, RefreshCw, Sun, HelpCircle, Settings, Maximize, Wallet } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import logo from '../logo.svg';
+import charts from '../assets/charts.svg';
+import indicators from '../assets/indicators.svg';
+import templates from '../assets/templates.svg';
+import drawing from '../assets/drawing.svg';
+import download from '../assets/download.svg';
+import Swal from 'sweetalert2';
 
 const app_id = 68351; // Replace with your app_id
 const socketUrl = `wss://ws.derivws.com/websockets/v3?app_id=${app_id}`;
@@ -18,6 +24,8 @@ const TradingInterface = () => {
     const [showDropdown, setShowDropdown] = useState(false); // To control dropdown visibility
     const [selectedChartType, setSelectedChartType] = useState('Area'); // Selected chart type
     const [selectedTimeInterval, setSelectedTimeInterval] = useState('1 minute'); // Selected time interval
+    const [showUserDropdown, setShowUserDropdown] = useState(false);
+    const userDropdownRef = useRef(null);
 
     // Sample chart data structure
     const chartTypes = ['Area', 'Candle', 'Hollow', 'OHLC'];
@@ -94,107 +102,225 @@ const TradingInterface = () => {
         <div className={containerClasses}>
             <div className={`flex items-center justify-between p-4 ${cardClasses} border-b`}>
                 <div className="flex items-center space-x-6">
-                    <span className="text-red-500 text-2xl font-bold">d</span>
-                    <span>Trader's Hub</span>
+                    <img src={logo} alt="Logo" className="h-8 w-8" />
+                    <button className="flex items-center space-x-2 hover:bg-gray-100 px-3 transition-colors py-1 rounded"
+                            onClick={() => {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'You clicked the button',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            }}
+                    >
+                        <House size={16} />
+                        <span>Trader's Hub</span>
                     {/* DerivTrader BUTTON */}
-                    <div className="flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded">
-                        <img src={logo} alt="Logo" className="h-8 w-8" />
-                        <span>derivTrader</span>
-                        <ChevronDown size={16} />
-                    </div>
-                    <span>Reports</span>
-                    <span>Cashier</span>
+                    </button>
+                    <button className="flex items-center space-x-2 hover:bg-gray-100 px-3 transition-colors py-1 rounded"
+                            onClick={() => {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'You clicked the button',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            }}
+                    >
+                        <BookMarked size={16} />
+                        <span>Reports</span>
+                    </button>
                 </div>
 
                 <div className="flex items-center space-x-4">
-                    <Bell size={20} />
-                    <User size={20} />
+                    <button className="flex items-center space-x-2 hover:bg-gray-100 p-2 transition-colors rounded-full"
+                                onClick={() => {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'You clicked the button',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }}
+                    >
+                        <Bell size={20} />
+                    </button>
+                    <div className="relative" ref={userDropdownRef}>
+                        <button
+                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                            onClick={() => setShowUserDropdown(!showUserDropdown)}
+                        >
+                            <User size={20} />
                     {/* PORTFOLIO BUTTON */}
+                        </button>
+
+                        {showUserDropdown && (
+                            <div className={`absolute right-0 mt-2 w-48 ${cardClasses} rounded-md shadow-lg py-1 z-50 border`}>
+                                <button
+                                    onClick={() => {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Switch To Situation 1',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        });
+                                        setShowUserDropdown(false);
+                                    }}
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                >
+                                    Situation 1
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Switch To Situation 2',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        });
+                                        setShowUserDropdown(false);
+                                    }}
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                >
+                                    Situation 2
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        navigate('/admin');
+                                        setShowUserDropdown(false);
+                                    }}
+                                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                >
+                                    Switch to Admin
+                                </button>
+                            </div>
+                        )}
+                    </div>
                     <div className="relative">
                         <button
                             className="flex items-center space-x-2"
                             onClick={() => setShowBalancePopup(!showBalancePopup)}
                         >
-                            <span className="text-blue-500">10,000.00 USD</span>
+                            <Wallet color="#4BB4B3" strokeWidth={2} size={16} />
+                            <span className="font-bold text-[#4BB4B3]">
+                                10,000.00 USD
+                            </span>
                             <ChevronDown size={16} />
                         </button>
 
                         {showBalancePopup && (
                             <div className={`absolute right-0 mt-2 w-64 ${cardClasses} shadow-lg rounded-lg p-4`}>
-                                <div className="font-bold mb-2">Deriv Account</div>
-                                <div className="mb-2"><strong>Demo</strong> (VRTC12500828)</div>
-                                <div className="mb-2"><strong>Total Assets:</strong> 10,000.00 USD</div>
-                                <button className="text-blue-500">Go to Trader's Hub</button>
+                                <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors">Deposit</button>
+                                <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors">Withdrawal</button>
+                                <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors">Transfer</button>
                             </div>
                         )}
                     </div>
-                    <button className="bg-red-500 text-white px-4 py-1 rounded">Deposit</button>
                 </div>
-                <button 
-                    onClick={() => navigate('/admin')}
-                    className="bg-red-500 text-white px-4 py-1 rounded ml-2"
+            </div>
+
+            <div className="bg-white border-b px-4 py-2 flex items-center space-x-6">
+                <div className="relative">
+                    <button className="flex items-center space-x-5 p-2 hover:bg-gray-100 transition-colors rounded"
+                            onClick={() => setShowDropdown((prev) => !prev)}>
+                        <img src={charts} alt="ChartsIcon" className="h-5 w-5" />
+                        <span>Charts</span>
+                        <ChevronDown className="h-4 w-4" />
+                    </button>
+                        {showDropdown && (
+                            <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border">
+                                <div className="space-y-4">
+                                    <div>
+                                        <span className="font-semibold">Chart Types</span>
+                                        <div className="space-y-2">
+                                            {chartTypes.map((type) => (
+                                                <button
+                                                    key={type}
+                                                    onClick={() => handleChartTypeChange(type)}
+                                                    className={`w-full text-left p-2 hover:bg-gray-100 rounded ${type === selectedChartType ? 'bg-gray-200' : ''}`}
+                                                >
+                                                    {type}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <span className="font-semibold">Time Interval</span>
+                                        <div className="space-y-2">
+                                            {timeIntervals[selectedChartType].map((interval) => (
+                                                <button
+                                                    key={interval}
+                                                    onClick={() => setSelectedTimeInterval(interval)}
+                                                    className={`w-full text-left p-2 hover:bg-gray-100 rounded ${interval === selectedTimeInterval ? 'bg-gray-200' : ''}`}
+                                                >
+                                                    {interval}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                        onClick={() => {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'You clicked the button',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        }}
                 >
-                    Admin
+                    <img src={indicators} alt="IndicatorsIcon" className="h-5 w-5" />
+                    <span>Indicators</span>
+                    <ChevronDown className="h-4 w-4" />
+                </button>
+                <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                        onClick={() => {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'You clicked the button',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        }}
+                >
+                    <img src={templates} alt="TemplatesIcon" className="h-5 w-5" />
+                    <span>Templates</span>
+                    <ChevronDown className="h-4 w-4" />
+                </button>
+                <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                        onClick={() => {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'You clicked the button',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        }}
+                >
+                    <img src={drawing} alt="DrawingIcon" className="h-5 w-5" />
+                    <span>Drawing Tools</span>
+                    <ChevronDown className="h-4 w-4" />
+                </button>
+                <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                        onClick={() => {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'You clicked the button',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        }}
+                >
+                    <img src={download} alt="DownloadIcon" className="h-5 w-5" />
+                    <span>Download</span>
                 </button>
             </div>
 
             <div className="flex flex-1">
-                {/* Left Sidebar */}
-                <div className={`w-16 ${cardClasses} border-r`}>
-                    <div className="flex flex-col space-y-4 p-2">
-                        <button className="p-2 hover:bg-gray-100 rounded"><Edit size={20} /></button>
-                        <button className="p-2 hover:bg-gray-100 rounded"><Download size={20} /></button>
-
-                        {/* Dropdown for Chart Types */}
-                        {/* CHART BUTTON */}
-                        <div
-                            className="relative"
-                            onMouseEnter={() => setShowDropdown(true)}
-                            onMouseLeave={() => setShowDropdown(false)}
-                        >
-                            <button className="p-2 hover:bg-gray-100 rounded"><Target size={20} /></button>
-
-                            {showDropdown && (
-                                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border">
-                                    <div className="space-y-4">
-                                        <div>
-                                            <span className="font-semibold">Chart Types</span>
-                                            <div className="space-y-2">
-                                                {chartTypes.map((type) => (
-                                                    <button
-                                                        key={type}
-                                                        onClick={() => handleChartTypeChange(type)}
-                                                        className={`w-full text-left p-2 hover:bg-gray-100 rounded ${type === selectedChartType ? 'bg-gray-200' : ''}`}
-                                                    >
-                                                        {type}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <span className="font-semibold">Time Interval</span>
-                                            <div className="space-y-2">
-                                                {timeIntervals[selectedChartType].map((interval) => (
-                                                    <button
-                                                        key={interval}
-                                                        onClick={() => setSelectedTimeInterval(interval)}
-                                                        className={`w-full text-left p-2 hover:bg-gray-100 rounded ${interval === selectedTimeInterval ? 'bg-gray-200' : ''}`}
-                                                    >
-                                                        {interval}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <button className="p-2 hover:bg-gray-100 rounded"><Minus size={20} /></button>
-                    </div>
-                </div>
-
                 {/* Main Chart Area */}
                 <div className="flex-1 p-4">
                     <div className={`${cardClasses} rounded-lg p-4`}>
