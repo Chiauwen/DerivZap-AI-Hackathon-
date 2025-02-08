@@ -8,6 +8,7 @@ import indicators from '../assets/indicators.svg';
 import templates from '../assets/templates.svg';
 import drawing from '../assets/drawing.svg';
 import download from '../assets/download.svg';
+import volatility100 from '../assets/volatility-100-1s.svg';
 import Swal from 'sweetalert2';
 
 const TradingInterface = () => {
@@ -203,7 +204,15 @@ const TradingInterface = () => {
                                             }}>Withdrawal
                                         </button>
                                 {/* TRANSFER */}
-                                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors">Transfer</button>
+                                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'You have transfred money to another DerivZap Account!',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                            }}>Transfer</button>
                                     </div>
                                 )}
                             </div>
@@ -220,7 +229,7 @@ const TradingInterface = () => {
                                 <ChevronDown className="h-4 w-4" />
                             </button>
                             {showDropdown && (
-                                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border">
+                                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border z-10">
                                     <div className="space-y-4">
                                         <div>
                                             <span className="font-semibold">Chart Types</span>
@@ -321,14 +330,24 @@ const TradingInterface = () => {
                         <div className="flex-1 p-4">
                             <div className={`${cardClasses} rounded-lg p-4`}>
                                 <div className="flex justify-between items-center mb-4">
-                                    <div>
+                                    <button className="flex items-center space-x-5 bg-gray-100 p-3 transition-colors rounded"
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'You have clicked the button!',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                            }}>
+                                        <img src={volatility100} alt="Volatility100" className="h-8 w-8" />
                                         <span className="font-semibold">Volatility 100 (1s) Index</span>
-                                        <span className="text-gray-500 ml-2">936.40 -0.06 (0.01%)</span>
-                                    </div>
+                                        <span className="text-gray-500 ml-2 text-sm">936.40 -0.06 (0.01%)</span>
+                                        <ChevronDown className="h-4 w-4" />
+                                    </button>
                                 </div>
 
                                 <div className="h-96">
-                                    <LineChart width={800} height={300} data={chartData}>
+                                    <LineChart width={1100} height={400} data={chartData}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="time" />
                                         <YAxis domain={['auto', 'auto']} />
