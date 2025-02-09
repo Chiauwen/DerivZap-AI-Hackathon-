@@ -585,6 +585,8 @@ const TradingInterface = () => {
                                     <button
                                         className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600"
                                         onClick={() => {
+                                            const currentTime = new Date().toLocaleString();
+                                            console.log(`Trade In at: ${currentTime}`);
                                             Swal.fire({
                                                 title: 'Success!',
                                                 text: 'You have clicked Trade In',
@@ -599,6 +601,8 @@ const TradingInterface = () => {
                                     {/* DOWN BUTTON */}
                                     <button className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
                                         onClick={() => {
+                                            const currentTime = new Date().toLocaleString();
+                                            console.log(`Trade Out at: ${currentTime}`);
                                             Swal.fire({
                                                 title: 'Success!',
                                                 text: 'You have clicked Trade Out',
