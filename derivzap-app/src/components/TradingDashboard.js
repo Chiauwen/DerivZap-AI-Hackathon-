@@ -139,25 +139,35 @@ const TradingInterface = () => {
   //     testConnection()
   //   }, [])
   const sendToBackend = async (buttonId, buttonName) => {
-    console.log('Sending button data to backend:', { buttonId, buttonName })
+    console.log('Sending button data to backend:', { buttonId, buttonName });
+    
     try {
-      const response = await fetch('http://127.0.0.1:5000/ui_analyse', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          actions: [buttonId],  // ✅ Change "action" to "actions" (plural)
-          buttonName: buttonName,
-          timestamp: new Date().toISOString(),
-        }),
-      })
-      const data = await response.json()
-      console.log('Response from Flask:', data)
+        const response = await fetch('http://127.0.0.1:5000/ui_analyse', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                actions: [buttonId],  // ✅ Change "action" to "actions" (plural)
+                buttonName: buttonName,
+                timestamp: new Date().toISOString(),
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();  // ✅ Extract response data
+        console.log('Response from Flask:', data);
+
+        return data;  // ✅ Return the response data
     } catch (error) {
-      console.error('Error:', error)
+        console.error('Error:', error);
+        return null;  // ✅ Return null in case of an error
     }
-}
+};
+
 
 
     return (

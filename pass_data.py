@@ -54,7 +54,6 @@ def handle_ui_analyse():
             accumulate.clear()
 
             return jsonify({
-
                 "result": last_result[0]
             })
 
