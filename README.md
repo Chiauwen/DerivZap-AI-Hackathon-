@@ -1,3 +1,4 @@
+<img src="https://github.com/Chiauwen/DerivZap-AI-Hackathon-/blob/main/derivzap-app/src/logo.svg" alt="DerivZap" width="100" height="70"/>
 DerivZap is an AI-driven fraud detection tool designed to identify suspicious trading behaviors and prevent financial misconduct. The system addresses the growing challenge of money laundering and fraudulent trading activities, where suspicious user deposit and withdraw funds without actual trading or engage in manipulative trading patterns.
 <br /><br />
 **Key Features:** <br />
