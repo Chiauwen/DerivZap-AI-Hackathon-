@@ -42,6 +42,42 @@ const TradingInterface = () => {
   const [selectedTimeInterval, setSelectedTimeInterval] = useState('1 minute') // Selected time interval
   const [showUserDropdown, setShowUserDropdown] = useState(false)
   const userDropdownRef = useRef(null)
+import React, { useState, useEffect, useRef } from 'react';
+import { House, BookMarked, Download, ChartLine, Bell, User, ChevronDown, MessageSquare, Heart, RefreshCw, Sun, HelpCircle, Settings, Maximize, Wallet } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { useNavigate } from 'react-router-dom';
+import logo from '../logo.svg';
+import charts from '../assets/charts.svg';
+import indicators from '../assets/indicators.svg';
+import templates from '../assets/templates.svg';
+import drawing from '../assets/drawing.svg';
+import download from '../assets/download.svg';
+import Swal from 'sweetalert2';
+
+const TradingInterface = () => {
+    const navigate = useNavigate();
+    const [isDarkTheme, setIsDarkTheme] = useState(false);
+    const [showBalancePopup, setShowBalancePopup] = useState(false);
+    const [stake, setStake] = useState(10);
+    const [takeProfit, setTakeProfit] = useState(false);
+    const [takeProfitAmount, setTakeProfitAmount] = useState('');
+    const [showDropdown, setShowDropdown] = useState(false); // To control dropdown visibility
+    const [selectedChartType, setSelectedChartType] = useState('Area'); // Selected chart type
+    const [selectedTimeInterval, setSelectedTimeInterval] = useState('1 minute');
+    const [showUserDropdown, setShowUserDropdown] = useState(false);
+    const userDropdownRef = useRef(null);
+  const navigate = useNavigate()
+  const [isDarkTheme, setIsDarkTheme] = useState(false)
+  const [chartData, setChartData] = useState([])
+  const [showBalancePopup, setShowBalancePopup] = useState(false)
+  const [stake, setStake] = useState(10)
+  const [takeProfit, setTakeProfit] = useState(false)
+  const [takeProfitAmount, setTakeProfitAmount] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false) // To control dropdown visibility
+  const [selectedChartType, setSelectedChartType] = useState('Area') // Selected chart type
+  const [selectedTimeInterval, setSelectedTimeInterval] = useState('1 minute') // Selected time interval
+  const [showUserDropdown, setShowUserDropdown] = useState(false)
+  const userDropdownRef = useRef(null)
 
   // Sample chart data structure
   const chartTypes = ['Area', 'Candle', 'Hollow', 'OHLC']
@@ -155,6 +191,16 @@ const TradingInterface = () => {
       socket.close()
     }
   }, [chartData])
+    // Sample chart data
+    const chartData = [
+        { time: "09:06:45", value: 936.2 },
+        { time: "09:06:50", value: 936.8 },
+        { time: "09:06:55", value: 936.6 },
+        { time: "09:07:00", value: 936.3 },
+        { time: "09:07:05", value: 937.0 },
+        { time: "09:07:10", value: 936.5 },
+        { time: "09:07:15", value: 936.4 }
+    ];
 
   // Function to handle stake changes
   const handleStakeChange = (amount) => {
@@ -190,58 +236,60 @@ const TradingInterface = () => {
     }
   }
 
-  // Dynamic class for theme switching
-  const containerClasses = `min-h-screen ${
-    isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
-  }`
-  const cardClasses = `${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`
+    // Dynamic class for theme switching
+    const containerClasses = `min-h-screen ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`;
+    const cardClasses = `${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`;
 
   return (
     <div className={containerClasses}>
-      <div
+            <div className="flex flex-col min-h-screen">
+                {/* Content Area */}
+                <div className="flex-grow">
+                    {/* Your main content here */}
+              <div
         className={`flex items-center justify-between p-4 ${cardClasses} border-b`}
       >
-        <div className="flex items-center space-x-6">
-          <img src={logo} alt="Logo" className="h-8 w-8" />
+                <div className="flex items-center space-x-6">
+                  <img src={logo} alt="Logo" className="h-8 w-8" />
 
           {/* TRADER HUB */}
-          <button
+                  <button
             className="flex items-center space-x-2 hover:bg-gray-100 px-3 transition-colors py-1 rounded"
-            onClick={() => {
-              Swal.fire({
-                title: 'Success!',
-                text: 'You clicked the button',
-                icon: 'success',
-                confirmButtonText: 'OK',
-              })
+                onClick={() => {
+                  Swal.fire({
+                    title: 'Success!',
+                    text: 'You clicked the button',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
               sendToBackend('trader-hub')
-            }}
-          >
-            <House size={16} />
-            <span>Trader's Hub</span>
-          </button>
+                }}
+                  >
+                    <House size={16} />
+                    <span>Trader's Hub</span>
+                  </button>
 
           {/* REPORTS */}
-          <button
+                  <button
             className="flex items-center space-x-2 hover:bg-gray-100 px-3 transition-colors py-1 rounded"
-            onClick={() => {
-              Swal.fire({
-                title: 'Success!',
-                text: 'You clicked the button',
-                icon: 'success',
-                confirmButtonText: 'OK',
-              })
+                onClick={() => {
+                  Swal.fire({
+                    title: 'Success!',
+                    text: 'You clicked the button',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                  })
               sendToBackend('report')
-            }}
-          >
-            <BookMarked size={16} />
-            <span>Reports</span>
-          </button>
-        </div>
+                }}
+                  >
+                    <BookMarked size={16} />
+                    <span>Reports</span>
+                  </button>
+                </div>
 
-        <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4">
           {/* NOTIFICATIONS   */}
-          <button
+                  <button
             className="flex items-center space-x-2 hover:bg-gray-100 p-2 transition-colors rounded-full"
             onClick={() => {
               Swal.fire({
@@ -252,18 +300,71 @@ const TradingInterface = () => {
               })
               sendToBackend('notifications')
             }}
-          >
-            <Bell size={20} />
-          </button>
-          <div className="relative" ref={userDropdownRef}>
-            <button
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              onClick={() => setShowUserDropdown(!showUserDropdown)}
-            >
-              <User size={20} />
+                  >
+                    <Bell size={20} />
+                  </button>
+                  <div className="relative" ref={userDropdownRef}>
+                    <button
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                      onClick={() => setShowUserDropdown(!showUserDropdown)}
+                    >
+                      <User size={20} />
               {/* PORTFOLIO BUTTON */}
-            </button>
+                    </button>
 
+                                {showUserDropdown && (
+                                    <div className={`absolute right-0 mt-2 w-48 ${cardClasses} rounded-md shadow-lg py-1 z-50 border`}>
+                                        <button
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'Switch To Situation 1',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                                setShowUserDropdown(false);
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                        >
+                                            Situation 1
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'Switch To Situation 2',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                                setShowUserDropdown(false);
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                        >
+                                            Situation 2
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                navigate('/admin');
+                                                setShowUserDropdown(false);
+                                            }}
+                                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                        >
+                                            Switch to Admin
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="relative">
+                                <button
+                                    className="flex items-center space-x-2"
+                                    onClick={() => setShowBalancePopup(!showBalancePopup)}
+                                >
+                                    <Wallet color="#4BB4B3" strokeWidth={2} size={16} />
+                                    <span className="font-bold text-[#4BB4B3]">
+                                        10,000.00 USD
+                                    </span>
+                                    <ChevronDown size={16} />
+                                </button>
             {showUserDropdown && (
               <div
                 className={`absolute right-0 mt-2 w-48 ${cardClasses} rounded-md shadow-lg py-1 z-50 border`}
@@ -318,6 +419,38 @@ const TradingInterface = () => {
               <ChevronDown size={16} />
             </button>
 
+                                {showBalancePopup && (
+                                    <div className={`absolute right-0 mt-2 w-64 ${cardClasses} shadow-lg rounded-lg p-4`}>
+                                {/* DEPOSIT */}
+                                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'You have deposit money into your DerivZap Acoount!',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                            }}>
+                                            Deposit
+                                        </button>
+                                {/* WITHDRAWAL */}
+                                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'You have withdrawn money to your bank account!',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                            }}>Withdrawal
+                                        </button>
+                                {/* TRANSFER */}
+                                        <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors">Transfer</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
             {showBalancePopup && (
               <div
                 className={`absolute right-0 mt-2 w-64 ${cardClasses} shadow-lg rounded-lg p-4`}
@@ -349,126 +482,126 @@ const TradingInterface = () => {
         </div>
       </div>
 
-      <div className="bg-white border-b px-4 py-2 flex items-center space-x-6">
-        <div className="relative">
+              <div className="bg-white border-b px-4 py-2 flex items-center space-x-6">
+                <div className="relative">
           {/* CHARTS */}
-          <button
+                  <button
             className="flex items-center space-x-5 p-2 hover:bg-gray-100 transition-colors rounded"
-            onClick={() => {setShowDropdown((prev) => !prev); sendToBackend("charts")}}
+                onClick={() => {setShowDropdown((prev) => !prev); sendToBackend("charts")}}
           >
-            <img src={charts} alt="ChartsIcon" className="h-5 w-5" />
-            <span>Charts</span>
-            <ChevronDown className="h-4 w-4" />
-          </button>
-          {showDropdown && (
-            <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border">
-              <div className="space-y-4">
-                <div>
-                  <span className="font-semibold">Chart Types</span>
-                  <div className="space-y-2">
-                    {chartTypes.map((type) => (
-                      <button
-                        key={type}
-                        onClick={() => handleChartTypeChange(type)}
-                        className={`w-full text-left p-2 hover:bg-gray-100 rounded ${
+                    <img src={charts} alt="ChartsIcon" className="h-4 w-4" />
+                    <span>Charts</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+              {showDropdown && (
+                <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 border">
+                  <div className="space-y-4">
+                    <div>
+                      <span className="font-semibold">Chart Types</span>
+                      <div className="space-y-2">
+                        {chartTypes.map((type) => (
+                          <button
+                            key={type}
+                            onClick={() => handleChartTypeChange(type)}
+                            className={`w-full text-left p-2 hover:bg-gray-100 rounded ${
                           type === selectedChartType ? 'bg-gray-200' : ''
                         }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                          >
+                            {type}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-                <div>
-                  <span className="font-semibold">Time Interval</span>
-                  <div className="space-y-2">
-                    {timeIntervals[selectedChartType].map((interval) => (
-                      <button
-                        key={interval}
-                        onClick={() => setSelectedTimeInterval(interval)}
-                        className={`w-full text-left p-2 hover:bg-gray-100 rounded ${
-                          interval === selectedTimeInterval ? 'bg-gray-200' : ''
-                        }`}
-                      >
-                        {interval}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        {/* INDICATORS */}
-        <button
-          className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
-          onClick={() => {
-            Swal.fire({
-              title: 'Success!',
-              text: 'You clicked the button',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            sendToBackend("indicators")
-          }}
-        >
-          <img src={indicators} alt="IndicatorsIcon" className="h-5 w-5" />
-          <span>Indicators</span>
-          <ChevronDown className="h-4 w-4" />
-        </button>
-        {/* TEMPLATES */}
-        <button
-          className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
-          onClick={() => {
-            Swal.fire({
-              title: 'Success!',
-              text: 'You clicked the button',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            sendToBackend("templates")
-          }}
-        >
-          <img src={templates} alt="TemplatesIcon" className="h-5 w-5" />
-          <span>Templates</span>
-          <ChevronDown className="h-4 w-4" />
-        </button>
-        {/* TOOLS */}
-        <button
-          className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
-          onClick={() => {
-            Swal.fire({
-              title: 'Success!',
-              text: 'You clicked the button',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            sendToBackend("tools")
-          }}
-        >
-          <img src={drawing} alt="DrawingIcon" className="h-5 w-5" />
-          <span>Drawing Tools</span>
-          <ChevronDown className="h-4 w-4" />
-        </button>
-        {/* DOWNLOAD */}
-        <button
-          className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
-          onClick={() => {
-            Swal.fire({
-              title: 'Success!',
-              text: 'You clicked the button',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            })
-            sendToBackend("download")
-          }}
-        >
-          <img src={download} alt="DownloadIcon" className="h-5 w-5" />
-          <span>Download</span>
-        </button>
-      </div>
+                                        <div>
+                                            <span className="font-semibold">Time Interval</span>
+                                            <div className="space-y-2">
+                                                {timeIntervals[selectedChartType].map((interval) => (
+                                                    <button
+                                                        key={interval}
+                                                        onClick={() => setSelectedTimeInterval(interval)}
+                                                        className={`w-full text-left p-2 hover:bg-gray-100 rounded ${interval === selectedTimeInterval ? 'bg-gray-200' : ''}`}
+                                                    >
+                                                        {interval}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    {/* INDICATORS */}
+                        <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                            onClick={() => {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'You clicked the button',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            }}
+                        >
+                            <img src={indicators} alt="IndicatorsIcon" className="h-5 w-5" />
+                            <span>Indicators</span>
+                            <ChevronDown className="h-4 w-4" />
+                        </button>
+                {/* TEMPLATES */}
+                        <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                            onClick={() => {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'You clicked the button',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            }}
+                        >
+                            <img src={templates} alt="TemplatesIcon" className="h-5 w-5" />
+                            <span>Templates</span>
+                            <ChevronDown className="h-4 w-4" />
+                        </button>
+                {/* TOOLS */}
+                        <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                            onClick={() => {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'You clicked the button',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            }}
+                        >
+                            <img src={drawing} alt="DrawingIcon" className="h-5 w-5" />
+                            <span>Drawing Tools</span>
+                            <ChevronDown className="h-4 w-4" />
+                        </button>
+                {/* DOWNLOAD */}
+                        <button className="flex items-center space-x-5 hover:bg-gray-100 p-2 transition-colors rounded"
+                            onClick={() => {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'You clicked the button',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            }}
+                        >
+                            <img src={download} alt="DownloadIcon" className="h-5 w-5" />
+                            <span>Download</span>
+                        </button>
+                    </div>
 
+                    <div className="flex flex-1">
+                        {/* Main Chart Area */}
+                        <div className="flex-1 p-4">
+                            <div className={`${cardClasses} rounded-lg p-4`}>
+                                <div className="flex justify-between items-center mb-4">
+                                    <div>
+                                        <span className="font-semibold">Volatility 100 (1s) Index</span>
+                                        <span className="text-gray-500 ml-2">936.40 -0.06 (0.01%)</span>
+                                    </div>
+                                </div>
       <div className="flex flex-1">
         {/* Main Chart Area */}
         <div className="flex-1 p-4">
@@ -483,116 +616,111 @@ const TradingInterface = () => {
               </button>
             </div>
 
-            <div className="h-96">
-              <LineChart width={800} height={300} data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="time" />
-                <YAxis domain={['auto', 'auto']} />
-                <Tooltip />
-                <Line
+                    <div className="h-96">
+                      <LineChart width={800} height={300} data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="time" />
+                        <YAxis domain={['auto', 'auto']} />
+                        <Tooltip />
+                        <Line
                   type="monotone"
                   dataKey="value"
                   stroke="#8884d8"
                   dot={false}
                 />
-              </LineChart>
-            </div>
-          </div>
-        </div>
+                      </LineChart>
+                    </div>
+                  </div>
+                </div>
 
-        {/* Right Controls */}
-        <div className={`w-72 ${cardClasses} border-l p-4`}>
-          <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold mb-2">Multipliers</h3>
-              <button className="px-3 py-1 border rounded hover:bg-gray-100">
+                {/* Right Controls */}
+                <div className={`w-72 ${cardClasses} border-l p-4`}>
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="font-semibold mb-2">Multipliers</h3>
+                      <button className="px-3 py-1 border rounded hover:bg-gray-100">
                 ×1
               </button>
-            </div>
+                    </div>
 
-            <div>
-              <h3 className="font-semibold mb-2">Stake</h3>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => handleStakeChange(-1)}
-                  className="px-3 py-1 border rounded hover:bg-gray-100"
-                >
+                    <div>
+                      <h3 className="font-semibold mb-2">Stake</h3>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => handleStakeChange(-1)}
+                          className="px-3 py-1 border rounded hover:bg-gray-100"
+                        >
                   -
                 </button>
-                <input
-                  type="number"
-                  value={stake}
-                  onChange={(e) =>
+                        <input
+                          type="number"
+                          value={stake}
+                          onChange={(e) =>
                     setStake(Math.max(0, Number(e.target.value)))
                   }
-                  className="w-20 px-2 py-1 border rounded text-center"
-                />
-                <button
-                  onClick={() => handleStakeChange(1)}
-                  className="px-3 py-1 border rounded hover:bg-gray-100"
-                >
+                          className="w-20 px-2 py-1 border rounded text-center"
+                        />
+                        <button
+                          onClick={() => handleStakeChange(1)}
+                          className="px-3 py-1 border rounded hover:bg-gray-100"
+                        >
                   +
                 </button>
-                <span>USD</span>
-              </div>
-            </div>
+                        <span>USD</span>
+                      </div>
+                    </div>
 
-            <div>
-              <h3 className="font-semibold mb-2">Take profit</h3>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={takeProfit}
-                  onChange={(e) => setTakeProfit(e.target.checked)}
-                />
-                <input
-                  type="number"
-                  value={takeProfitAmount}
-                  onChange={(e) => setTakeProfitAmount(e.target.value)}
-                  placeholder="Enter amount"
-                  disabled={!takeProfit}
-                  className="w-32 px-2 py-1 border rounded"
-                />
-                <span>USD</span>
-              </div>
-            </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Take profit</h3>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={takeProfit}
+                          onChange={(e) => setTakeProfit(e.target.checked)}
+                        />
+                        <input
+                          type="number"
+                          value={takeProfitAmount}
+                          onChange={(e) => setTakeProfitAmount(e.target.value)}
+                          placeholder="Enter amount"
+                          disabled={!takeProfit}
+                          className="w-32 px-2 py-1 border rounded"
+                        />
+                        <span>USD</span>
+                      </div>
+                    </div>
 
-            <div className="flex space-x-2">
+                    <div className="flex space-x-2">
               {/* UP */}
-              <button className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">
-                Up
-              </button>
+                      <button className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">
+                        Up
+                      </button>
               {/* DOWN */}
-              <button className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600">
-                Down
-              </button>
+                      <button className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600">
+                        Down
+                      </button>
+                                </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Bottom Status Bar */}
-      <div
-        className={`flex items-center justify-between p-4 ${cardClasses} border-t`}
-      >
-        <span>2025-02-08 09:07:15 GMT</span>
-        <div className="flex items-center space-x-4">
-          <MessageSquare size={16} />
-          <Heart size={16} />
-          <RefreshCw size={16} />
-          <Sun
-            size={16}
-            onClick={() => setIsDarkTheme(!isDarkTheme)}
-            className="cursor-pointer"
-          />
-          <HelpCircle size={16} />
-          <Settings size={16} />
-          <span className="font-semibold">EN</span>
-          <Maximize size={16} />
+            {/* Bottom Status Bar */}
+            <div className={`flex items-center justify-between p-4 ${cardClasses} border-t`}>
+                <span>2025-02-08 09:07:15 GMT</span>
+                <div className="flex items-center space-x-4">
+                    <MessageSquare size={16} />
+                    <Heart size={16} />
+                    <RefreshCw size={16} />
+                    <Sun size={16} onClick={() => setIsDarkTheme(!isDarkTheme)} className="cursor-pointer" />
+                    <HelpCircle size={16} />
+                    <Settings size={16} />
+                    <span className="font-semibold">EN</span>
+                    <Maximize size={16} />
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  )
-}
+    );
+};
 
 export default TradingInterface
