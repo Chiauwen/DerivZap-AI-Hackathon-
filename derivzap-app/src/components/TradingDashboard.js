@@ -134,31 +134,31 @@ const TradingInterface = () => {
 
     const [connectionStatus, setConnectionStatus] = useState('Not connected')
 
-    //   useEffect(() => {
-    //     console.log('Component mounted') // Add this to verify the component loads
-    //     testConnection()
-    //   }, [])
-
-    const sendToBackend = async (buttonId, buttonName) => {
-        console.log('Sending button data to backend:', { buttonId, buttonName })
-        try {
-            const response = await fetch('http://127.0.0.1:5000/ui_analyse', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: buttonId,
-                    buttonName: buttonName,
-                    timestamp: new Date().toISOString(),
-                }),
-            })
-            const data = await response.json()
-            console.log('Response from Flask:', data)
-        } catch (error) {
-            console.error('Error:', error)
-        }
+  //   useEffect(() => {
+  //     console.log('Component mounted') // Add this to verify the component loads
+  //     testConnection()
+  //   }, [])
+  const sendToBackend = async (buttonId, buttonName) => {
+    console.log('Sending button data to backend:', { buttonId, buttonName })
+    try {
+      const response = await fetch('http://127.0.0.1:5000/ui_analyse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          actions: [buttonId],  // ✅ Change "action" to "actions" (plural)
+          buttonName: buttonName,
+          timestamp: new Date().toISOString(),
+        }),
+      })
+      const data = await response.json()
+      console.log('Response from Flask:', data)
+    } catch (error) {
+      console.error('Error:', error)
     }
+}
+
 
     return (
         <div className={containerClasses}>
@@ -232,62 +232,63 @@ const TradingInterface = () => {
                                     {/* PORTFOLIO BUTTON */}
                                 </button>
 
-                                {showUserDropdown && (
-                                    <div
-                                        className={`absolute right-0 mt-2 w-48 ${cardClasses} rounded-md shadow-lg py-1 z-50 border`}
-                                    >
-                                        <button
-                                            onClick={() => {
-                                                Swal.fire({
-                                                    title: 'Success!',
-                                                    text: 'Switch To Situation 1',
-                                                    icon: 'success',
-                                                    confirmButtonText: 'OK',
-                                                })
-                                                sendToBackend('portfolio')
-                                                setShowUserDropdown(false)
-                                            }}
-                                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
-                                        >
-                                            Situation 1
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                Swal.fire({
-                                                    title: 'Success!',
-                                                    text: 'Switch To Situation 2',
-                                                    icon: 'success',
-                                                    confirmButtonText: 'OK',
-                                                })
-                                                setShowUserDropdown(false)
-                                            }}
-                                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
-                                        >
-                                            Situation 2
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                navigate('/admin')
-                                                setShowUserDropdown(false)
-                                            }}
-                                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
-                                        >
-                                            Switch to Admin
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="relative">
-                                <button
-                                    className="flex items-center space-x-2"
-                                    onClick={() => setShowBalancePopup(!showBalancePopup)}
-                                >
-                                    <Wallet color="#4BB4B3" strokeWidth={2} size={16} />
-                                    <span className="font-bold text-[#4BB4B3]">
-                                        10,000.00 USD
-                                    </span>
-                                    <ChevronDown size={16} />
-                                </button>
+                {showUserDropdown && (
+                  <div
+                    className={`absolute right-0 mt-2 w-48 ${cardClasses} rounded-md shadow-lg py-1 z-50 border`}
+                  >
+                    <button
+                      onClick={() => {
+                        Swal.fire({
+                          title: 'Success!',
+                          text: 'Switch To Situation 1',
+                          icon: 'success',
+                          confirmButtonText: 'OK',
+                        })
+                        sendToBackend("3")
+                        setShowUserDropdown(false)
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                    >
+                      Situation 1
+                    </button>
+                    <button
+                      onClick={() => {
+                        Swal.fire({
+                          title: 'Success!',
+                          text: 'Switch To Situation 2',
+                          icon: 'success',
+                          confirmButtonText: 'OK',
+                        })
+                        sendToBackend("2")
+                        setShowUserDropdown(false)
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                    >
+                      Situation 2
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/admin')
+                        setShowUserDropdown(false)
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                    >
+                      Switch to Admin
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className="relative">
+                <button
+                  className="flex items-center space-x-2"
+                  onClick={() => setShowBalancePopup(!showBalancePopup)}
+                >
+                  <Wallet color="#4BB4B3" strokeWidth={2} size={16} />
+                  <span className="font-bold text-[#4BB4B3]">
+                    10,000.00 USD
+                  </span>
+                  <ChevronDown size={16} />
+                </button>
 
                                 {showBalancePopup && (
                                     <div
