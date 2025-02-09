@@ -138,7 +138,6 @@ const TradingInterface = () => {
   //     console.log('Component mounted') // Add this to verify the component loads
   //     testConnection()
   //   }, [])
-
   const sendToBackend = async (buttonId, buttonName) => {
     console.log('Sending button data to backend:', { buttonId, buttonName })
     try {
@@ -148,7 +147,7 @@ const TradingInterface = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action: buttonId,
+          actions: [buttonId],  // ✅ Change "action" to "actions" (plural)
           buttonName: buttonName,
           timestamp: new Date().toISOString(),
         }),
@@ -158,7 +157,8 @@ const TradingInterface = () => {
     } catch (error) {
       console.error('Error:', error)
     }
-  }
+}
+
 
   return (
     <div className={containerClasses}>
@@ -244,7 +244,7 @@ const TradingInterface = () => {
                           icon: 'success',
                           confirmButtonText: 'OK',
                         })
-                        sendToBackend('portfolio')
+                        sendToBackend("3")
                         setShowUserDropdown(false)
                       }}
                       className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
@@ -259,6 +259,7 @@ const TradingInterface = () => {
                           icon: 'success',
                           confirmButtonText: 'OK',
                         })
+                        sendToBackend("2")
                         setShowUserDropdown(false)
                       }}
                       className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
