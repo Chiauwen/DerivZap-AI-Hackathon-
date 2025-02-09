@@ -37,11 +37,14 @@ def handle_ui_analyse():
 
         print(f"Extracted num_days: {num_days}")
         print(f"Remaining actions: {actions_list}")
+        
+        
 
         # **Trigger processing when the last action is "withdrawal"**
         if actions_list and actions_list[-1].lower() == "withdrawal":
             print("Withdrawal detected! Processing accumulated data...")
-
+            actions_list = [", ".join(actions_list)]  
+            print("new", actions_list)
             # Call ui_analyse with num_days, actions_list
             result = ui_analyse([num_days], actions_list, [60])  # Modify as needed
             last_result = result.tolist()  # Store the last result
@@ -51,9 +54,7 @@ def handle_ui_analyse():
             accumulate.clear()
 
             return jsonify({
-                "message": f"Processed {accumulated_data}",
-                "num_days": num_days,
-                "actions": actions_list,
+
                 "result": last_result[0]
             })
 

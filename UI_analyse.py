@@ -9,7 +9,7 @@ def ui_analyse(age_days, action, time_takes):
 
     df = pd.read_csv("UI.csv")
 
-    vectorizer = CountVectorizer(tokenizer=lambda x: x.split(","))
+    vectorizer = CountVectorizer()  # Remove tokenizer, let CountVectorizer handle it
     vectorizer.fit(df["action"])
 
     new_data = pd.DataFrame(

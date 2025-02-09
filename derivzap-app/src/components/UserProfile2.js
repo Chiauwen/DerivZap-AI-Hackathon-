@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Clock, User, FileText, Shield, Calendar, Ban, X, ChevronDown } from 'lucide-react';
 import { Dialog, DialogContent } from '@radix-ui/react-dialog';
 import profilephoto from '../assets/image.png';
@@ -105,13 +105,19 @@ const UserProfile2 = () => {
       </DialogContent>
     </Dialog>
   );
+  const [entryTime, setEntryTime] = useState('');
 
+  useEffect(() => {
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString('en-US', { hour12: false });
+    setEntryTime(formattedTime);
+  }, []); 
   // Mock current incidents
   const currentIncidents = [
     {
       id: 1,
       date: '2024-02-09',
-      time: '04:23:45',
+      time: entryTime,
       severity: 'Caution',
       activity: 'Unusual Account Activity',
       details: 'New user with zero trading experiences able to complete trading in short period of time',
