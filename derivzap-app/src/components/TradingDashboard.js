@@ -9,6 +9,7 @@ import templates from '../assets/templates.svg';
 import drawing from '../assets/drawing.svg';
 import download from '../assets/download.svg';
 import volatility100 from '../assets/volatility-100-1s.svg';
+import accumulator from '../assets/accumulator.svg';
 import Swal from 'sweetalert2';
 
 const TradingInterface = () => {
@@ -16,6 +17,7 @@ const TradingInterface = () => {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     const [showBalancePopup, setShowBalancePopup] = useState(false);
     const [stake, setStake] = useState(10);
+    const [selectedGrowthRate, setSelectedGrowthRate] = useState(1);
     const [takeProfit, setTakeProfit] = useState(false);
     const [takeProfitAmount, setTakeProfitAmount] = useState('');
     const [showDropdown, setShowDropdown] = useState(false); // To control dropdown visibility
@@ -43,6 +45,8 @@ const TradingInterface = () => {
         { time: "09:07:10", value: 936.5 },
         { time: "09:07:15", value: 936.4 }
     ];
+
+    const growthRates = [1, 2, 3, 4, 5];
 
     // Function to handle stake changes
     const handleStakeChange = (amount) => {
@@ -361,11 +365,21 @@ const TradingInterface = () => {
                         {/* Right Controls */}
                         <div className={`w-72 ${cardClasses} border-l p-4`}>
                             <div className="space-y-6">
-                                <div>
-                                    <h3 className="font-semibold mb-2">Multipliers</h3>
-                                    <button className="px-3 py-1 border rounded hover:bg-gray-100">×1</button>
+                                <div className="flex justify-between items-center mb-4">
+                                    <button className="flex items-center space-x-5 bg-gray-100 p-3 transition-colors rounded w-full"
+                                            onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'You have clicked the button!',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                            }}>
+                                        <img src={accumulator} alt="AccumulatorIcon" className="h-5 w-5" />
+                                        <h3 className="font-semibold flex-grow">Accumulator</h3>
+                                        <ChevronDown className="h-4 w-4 ml-auto" />
+                                    </button>
                                 </div>
-
                                 <div>
                                     <h3 className="font-semibold mb-2">Stake</h3>
                                     <div className="flex items-center space-x-2">
@@ -407,15 +421,18 @@ const TradingInterface = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex space-x-2">
-                            {/* UP BUTTON */}
-                                    <button className="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">
-                                        Up
-                                    </button>
-                            {/* DOWN BUTTON */}
-                                    <button className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600">
-                                        Down
-                                    </button>
+                                <div className="flex items-center">
+                                <button className="w-full bg-teal-500 text-white font-bold py-3 rounded hover:shadow-lg"
+                                        onClick={() => {
+                                                Swal.fire({
+                                                    title: 'Success!',
+                                                    text: 'You have successfully Buy Iin!',
+                                                    icon: 'success',
+                                                    confirmButtonText: 'OK'
+                                                });
+                                            }}>
+                                    Buy
+                                </button>
                                 </div>
                             </div>
                         </div>
